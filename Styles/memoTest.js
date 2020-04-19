@@ -30,12 +30,14 @@ const arrayNumerosAzar =(numeros)=>{
     return numeros
 }
 
+
+
 // función para armar array2D, los elementos se deben pushear de 4 en 4= (i+=4)
 const obtenerArr2D = (numeros) =>{
     let arr2D=[];
         for (let i = 0; i < numeros.length; i+=4) {
-            let arr1=numeros.slice(i, i+4) + `\n`;
-            arr2D.push(arr1)        
+            let arr1=numeros.slice(i, i+4);
+            arr2D.push(arr1)   
         } 
     return arr2D
 }
@@ -49,6 +51,7 @@ const ocultarValor = (numeros) =>{
     return arr2D
 }
 
+
 // función para agregar elementos aleatorios al Array2D
     //función para llamar a otra y convertir un array de elementos en aleatorios
 let tableroAleatorio= arrayNumerosAzar(numerosTablero); //hago aleatorio el array
@@ -59,30 +62,64 @@ let muestroValorOculto= ocultarValor(tableroAleatorio); //"✖️✖️✖️"/
 console.log(muestroValorOculto)
 
     // función para llamar otra y para q los elementos ocultos se posicionen en un array2D
-let muestroArray2D = obtenerArr2D(muestroValorOculto); //hago aleatorio el arr2D
+let muestroArray2D= obtenerArr2D(muestroValorOculto); //hago aleatorio el arr2D
 console.log(muestroArray2D)
 
-// función elegir números (coordenadas)
-const ingreseCoordenadas =(tablero)=>{
-    console.log(tablero)
-    let filas = "";
-    let columnas = "";
-    let resultado =tablero[filas] && tablero[filas][columnas];
-    if(resultado !== undefined){
-        return resultado
-    } else {
-        return(`Ingrese índices correctos`)
+let array2DNumeros= obtenerArr2D(tableroAleatorio)
+// console.log(array2DNumeros)
+
+const imprimoArray2D=()=>{
+    let imprimoTablero="";
+
+    for (let i = 0; i < muestroArray2D.length; i++) {
+           let auxiliar="";
+        for (let j = 0; j < muestroArray2D[i].length; j++) {
+            auxiliar+= muestroArray2D[i][j] + ` `
+        }
+        imprimoTablero+= auxiliar + `\n`
     }
+    return imprimoTablero
 }
+
+// función elegir números (coordenadas)
+// const ingreseCoordenadas =(tablero)=>{
+//     console.log(tablero)
+//     let filas = "";
+//     let columnas = "";
+//     let resultado =tablero[filas] && tablero[filas][columnas];
+//     if(resultado !== undefined){
+//         return resultado
+//     } else {
+//         return(`Ingrese índices correctos`)
+//     }
+// }
 
 // función para que compare los números y las coordenadas del usuario
-const comparaElementos =(x, y)=>{
-    let resultado = x===y ? x && y : "✖️";   
-        return resultado
+
+
+// función para que obtenga las 2 jugadas, compararlas y actualizar el tablero
+const obtenerJugadas=(tablero)=>{   
+    console.log(tablero)
+    let jugada1=prompt("Ingrese las coordenadas: 'X Y'").split(" ")
+    let a= jugada1[0]
+    let b=jugada1[1]
+    let jugada2= prompt("Ingrese las coordenadas: 'X Y'").split(" ")
+    let c= jugada2[0]
+    let d=jugada2[1]
+    let resultado =tablero[a -1][b -1] === tablero[c -1][d -1] ? tablero[a -1][b -1] &&tablero[c -1][d -1] : "✖️";
+    console.log(resultado)
+    if(resultado !== "✖️" ){
+        muestroArray2D[a -1][b -1]=resultado
+        muestroArray2D[c -1][d -1] =resultado
+    } 
+    return muestroArray2D
 }
 
-// función para que compare las 2 jugadas
 
+// const comparaElementos =(x, y)=>{
+//     let resultado = x===y ? x && y : "✖️";   
+//         return resultado
+// }
 
 // obtener historial 
 // const obtenerHistorial =(partidas, partidasGanadas, partidasPerdidas)=>{
@@ -103,25 +140,35 @@ const mostrarHistorial = (historialJugadas, jugadasGanadas, jugadasPerdidas) => 
 
 
 // crear variable de vueltas
-const vueltas = 5;
+let vueltas = 5;
 
 // Condición de salida
-let juegoSigue = true;
+let aJugar = true;
+let mensajeInicio = `Comencemos!!! ` + `\n`
 
-// incia el juego el partida N° 1
 
+// while(aJugar){
 
-while(juegoSigue && vueltas){
-    alert(muestroArray2D)
+//     let vueltas = 5;
     
-    filas = Number(prompt("Ingrese fila"))
-    columnas = Number(prompt("Ingrese columna"));       
-    alert(ingreseCoordenadas(muestroArray2D))
 
-        
-    juegoSigue=confirm(`¿Desea seguir jugando?`)
-}
+//     // COMIENZA EL JUEGO
+//     while(vueltas){
+//         alert(mensajeInicio + imprimoArray2D(muestroValorOculto));
+//     // let actualizarTablero = imprimoArray2D(muestroValorOculto);
+//     alert(obtenerJugadas(imprimoArray2D(muestroArray2D)))
+//     // alert(imprimoArray2D(actualizarTablero))
+  
+//     vueltas--  
     
+//     }
+    
+//     aJugar = confirm(`¿Desea seguir jugando?`)
+// }
+
+
+    
+
 // JUGADORA
     // ingresar dos coordenadas para ver si acierta (x,y)
     // si erra, pierde un intento
@@ -129,7 +176,7 @@ while(juegoSigue && vueltas){
     // si erra, vuelven a cubrise
 
 
-// && vueltas !== "cantidadVueltas"
+
 // JUEGO TERMINA
     // cuando se descubren todos lo números
     // o cuando terminan los 5 intentos
