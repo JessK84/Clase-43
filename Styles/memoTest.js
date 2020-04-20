@@ -98,28 +98,32 @@ const imprimoArray2D=()=>{
 
 
 // función para que obtenga las 2 jugadas, compararlas y actualizar el tablero
-const obtenerJugadas=(tablero)=>{   
+const obtenerJugadas=(jugada1, jugada2, tablero)=>{   
     console.log(tablero)
-    let jugada1=prompt("Ingrese las coordenadas: 'X Y'").split(" ")
     let a= jugada1[0]
     let b=jugada1[1]
-    let jugada2= prompt("Ingrese las coordenadas: 'X Y'").split(" ")
     let c= jugada2[0]
     let d=jugada2[1]
     let resultado =tablero[a -1][b -1] === tablero[c -1][d -1] ? tablero[a -1][b -1] &&tablero[c -1][d -1] : "✖️";
     console.log(resultado)
-    if(resultado !== "✖️" ){
+    if(resultado){
         muestroArray2D[a -1][b -1]=resultado
         muestroArray2D[c -1][d -1] =resultado
-    } 
+    }  else if (!resultado) {
+        muestroArray2D="✖️"
+    }
     return muestroArray2D
 }
 
+// función para actualizar tablero
+const actualizarTablero =(x0, y0, x1, y1, tablero) =>{
 
-// const comparaElementos =(x, y)=>{
-//     let resultado = x===y ? x && y : "✖️";   
-//         return resultado
-// }
+}
+
+const comparaElementos =(x, y)=>{
+    let resultado = x===y ? x && y : "✖️";   
+        return resultado
+}
 
 // obtener historial 
 // const obtenerHistorial =(partidas, partidasGanadas, partidasPerdidas)=>{
@@ -139,32 +143,42 @@ const mostrarHistorial = (historialJugadas, jugadasGanadas, jugadasPerdidas) => 
 }
 
 
-// crear variable de vueltas
-let vueltas = 5;
+
 
 // Condición de salida
 let aJugar = true;
-let mensajeInicio = `Comencemos!!! ` + `\n`
+const saludo = "Comencemos!!! \n";
+const arrayImpreso = imprimoArray2D(muestroValorOculto);
+const mensajeInicial = saludo + arrayImpreso
+// let resultado=[]
 
+while(aJugar){
 
-// while(aJugar){
-
-//     let vueltas = 5;
+    let vueltas = 5;
     
 
-//     // COMIENZA EL JUEGO
-//     while(vueltas){
-//         alert(mensajeInicio + imprimoArray2D(muestroValorOculto));
-//     // let actualizarTablero = imprimoArray2D(muestroValorOculto);
-//     alert(obtenerJugadas(imprimoArray2D(muestroArray2D)))
-//     // alert(imprimoArray2D(actualizarTablero))
+    // COMIENZA EL JUEGO
+    while(vueltas){
+        alert(mensajeInicial);
+        jugada1=prompt("Ingrese las coordenadas: 'X Y'").split(" ") 
+        alert(arrayImpreso[a -1][b -1])  
+        jugada2=prompt("Ingrese las coordenadas: 'X Y'").split(" ") 
+        alert(arrayImpreso[c -1][d -1])
+        alert(muestroArray2D)
+
+        // alert(obtenerJugadas(muestroValorOculto))
+        // alert(comparaElementos(jugada1, jugada2))
+
+    // let actualizarTablero = imprimoArray2D(muestroValorOculto);
+    // alert(obtenerJugadas(imprimoArray2D(muestroArray2D)))
+    // alert(imprimoArray2D(actualizarTablero))
   
-//     vueltas--  
+    vueltas--  
     
-//     }
+    }
     
-//     aJugar = confirm(`¿Desea seguir jugando?`)
-// }
+    aJugar = confirm(`¿Desea seguir jugando?`)
+}
 
 
     
