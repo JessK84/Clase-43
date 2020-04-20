@@ -12,187 +12,134 @@
 // Permitir seguir jugando una vez terminado
 // Llevar un historial de partidas jugadas (con cuantos intentos se hizo, con qué tablero y si se ganó o no)
 
-// TABLERO DE ELEMENTOS YA DEFINIDO
-const numerosTablero =[2, 3, 4, 6, 8, 9, 2, 3, 4, 6, 8, 9];
-
-
-// =========== FUNCIONES ================================//
-
-// función para que muestre un array completo de números al azar.
-const arrayNumerosAzar =(numeros)=>{
-    let i,j,k;
-    for (i = numeros.length; i; i--) {
-        j = Math.floor(Math.random() * i);
-        k = numeros[i - 1];
-        numeros[i - 1] = numeros[j];
-        numeros[j] = k;
-        }
-    return numeros
+// se definen los elemntos a mostrar en el tablero
+const arrOriginal = [2, 3, 4, 6, 8, 9, 2, 3, 4, 6, 8, 9]
+/*********** FUNCIONES ***********/
+// recibe un arreglo simple y lo retorna con sus elementos mezclados
+const randomArr = arr => {
+  for(let i = arr.length; i; i--){
+    let j = Math.floor(Math.random() * i)
+    let k = arr[i -1]
+    arr[i - 1] = arr[j]
+    arr[j] = k
+  }
+  return arr
 }
-
-
-
-// función para armar array2D, los elementos se deben pushear de 4 en 4= (i+=4)
-const obtenerArr2D = (numeros) =>{
-    let arr2D=[];
-        for (let i = 0; i < numeros.length; i+=4) {
-            let arr1=numeros.slice(i, i+4);
-            arr2D.push(arr1)   
-        } 
-    return arr2D
+// recibe un arreglo simple y retorna un arreglo 2D
+const creoArr2D = arr =>{
+  const arr2D = []
+  for(let i = 0; i < arr.length; i += 4){
+    let aux = arr.slice(i, i + 4)
+    arr2D.push(aux)
+  }
+  return arr2D
+} 
+// recibe un arreglo simple y oculta sus elementos
+const ocultoElementos = arr =>{
+  const ocultos = []
+  for(let i = 0; i < arr.length; i ++){
+    ocultos.push("✖️")
+  }
+  return ocultos
 }
-
-// OBTENER UN VALOR OCULTO => ocultar un array
-const ocultarValor = (numeros) =>{
-    let arr2D=[];
-        for (let i = 0; i < numeros.length; i++) {
-            arr2D.push("✖️")      
-        } 
-    return arr2D
-}
-
-
-// función para agregar elementos aleatorios al Array2D
-    //función para llamar a otra y convertir un array de elementos en aleatorios
-let tableroAleatorio= arrayNumerosAzar(numerosTablero); //hago aleatorio el array
-console.log(tableroAleatorio)
-
-    // función para llamar otra y ocultar un array aleatorio
-let muestroValorOculto= ocultarValor(tableroAleatorio); //"✖️✖️✖️"/
-console.log(muestroValorOculto)
-
-    // función para llamar otra y para q los elementos ocultos se posicionen en un array2D
-let muestroArray2D= obtenerArr2D(muestroValorOculto); //hago aleatorio el arr2D
-console.log(muestroArray2D)
-
-let array2DNumeros= obtenerArr2D(tableroAleatorio)
-// console.log(array2DNumeros)
-
-const imprimoArray2D=()=>{
-    let imprimoTablero="";
-
-    for (let i = 0; i < muestroArray2D.length; i++) {
-           let auxiliar="";
-        for (let j = 0; j < muestroArray2D[i].length; j++) {
-            auxiliar+= muestroArray2D[i][j] + ` `
-        }
-        imprimoTablero+= auxiliar + `\n`
+// recibe un arreglo 2D y retorna un tablero
+const imprimoTablero = arr2D => {
+  let tablero = ""
+  for(let i = 0; i < arr2D.length; i++){
+    let auxiliar = ""
+    for(let j = 0; j < arr2D[i].length; j++){
+      auxiliar += arr2D[i][j] + ` `
     }
-    return imprimoTablero
+    tablero += auxiliar + `\n`
+  }
+  return tablero
+}
+// recibe coordendas y las muestra en el tablero
+const tableroParcial = (coor1, tableroOculto, tableroNumeros) =>{
+  let a = coor1[0] -1;
+  let b = coor1[1] -1;
+  tableroOculto[a][b] = tableroNumeros[a][b]
+  return imprimoTablero(tableroOculto)
 }
 
-// función elegir números (coordenadas)
-// const ingreseCoordenadas =(tablero)=>{
-//     console.log(tablero)
-//     let filas = "";
-//     let columnas = "";
-//     let resultado =tablero[filas] && tablero[filas][columnas];
-//     if(resultado !== undefined){
-//         return resultado
-//     } else {
-//         return(`Ingrese índices correctos`)
-//     }
-// }
-
-// función para que compare los números y las coordenadas del usuario
-
-
-// función para que obtenga las 2 jugadas, compararlas y actualizar el tablero
-const obtenerJugadas=(jugada1, jugada2, tablero)=>{   
-    console.log(tablero)
-    let a= jugada1[0]
-    let b=jugada1[1]
-    let c= jugada2[0]
-    let d=jugada2[1]
-    let resultado =tablero[a -1][b -1] === tablero[c -1][d -1] ? tablero[a -1][b -1] &&tablero[c -1][d -1] : "✖️";
-    console.log(resultado)
-    if(resultado){
-        muestroArray2D[a -1][b -1]=resultado
-        muestroArray2D[c -1][d -1] =resultado
-    }  else if (!resultado) {
-        muestroArray2D="✖️"
-    }
-    return muestroArray2D
+// recibe las jugadas, las compara y actualiza el tablero
+const compararJugadas = (jugada1, jugada2, tableroOculto, tableroNumeros) => {
+  let a = jugada1[0] - 1;
+  let b = jugada1[1] - 1;
+  let c = jugada2[0] - 1;
+  let d = jugada2[1] - 1;
+ 
+  if(tableroNumeros[a][b] === tableroNumeros[c][d]){
+      alert(`Adivinaste`)
+      tableroOculto[a][b] = tableroNumeros[a][b] ;
+      tableroOculto[c][d] = tableroNumeros[c][d]
+  }  else {
+        rondas--
+        alert(`Número incorrecto, te quedan ${rondas}`)    
+        tableroOculto[a][b] = "✖️";
+        tableroOculto[c][d] = "✖️"
+  }
+  
+  return tableroOculto
 }
 
-// función para actualizar tablero
-const actualizarTablero =(x0, y0, x1, y1, tablero) =>{
-
-}
-
-const comparaElementos =(x, y)=>{
-    let resultado = x===y ? x && y : "✖️";   
-        return resultado
-}
-
-// obtener historial 
-// const obtenerHistorial =(partidas, partidasGanadas, partidasPerdidas)=>{
-//     resultado="";
-//     for (let i = 0; i < partidas.length; i++) {       
-//     }
-// }
-
-// función para mostrar mensaje para armar el historial
-const mostrarHistorial = (historialJugadas, jugadasGanadas, jugadasPerdidas) => {
+// función para crear mensaje con historial de cada juego
+const obtenerHistorial = (historialJugadas) => {
     let historial = "";
 
     for (let i = 0; i < historialJugadas.length; i++) {
-        historial += `${historialJugadas[i].join(" ")} / Partidas Ganadas: ${jugadasGanadas[i].join(" ")}\n` + `/ Partidas perdidas: ${jugadasPerdidas[i].join(" ")}`
+        historial += `${historialJugadas[i].join(" ")} / ${historialPistas[i].join(" ")}\n`
     }
+
     return historial;
 }
 
+// creo un arreglo con elementos mezclados
+let numerosMezclados = randomArr(arrOriginal)
+// creo un arreglo de elementos ocultos
+let elementosOcultos = ocultoElementos(numerosMezclados)
+// creo arrgelos 2D de "numerosMezclados" y "elementosOcultos"
+let numeros2D = creoArr2D(numerosMezclados)
+let ocultos2D = creoArr2D(elementosOcultos)
+console.log(numeros2D);
+// creo el tablero inicial con elementos ocultos
+let tableroInicial = imprimoTablero(ocultos2D)
+let juego = true;
+let mensaje = `MEMOTEST\n`;
+let rondas = 0
 
+while(juego){
+  alert(mensaje + tableroInicial)
+  let intentos = Number(prompt(`En cuántos intentos crees lograr el desafío`))
+  rondas=intentos;
+  while(rondas > 0){
+    // jugada 1
+    let coordenada1 = prompt(`Ingrese coordenadas de la jugada 1`).split("")
+    alert(`MEMOTEST\n`+ tableroParcial(coordenada1, ocultos2D, numeros2D))
+    // jugada 2
+    let coordenada2 = prompt(`Ingrese coordenadas de la jugada 2`).split("")
+    alert(`MEMOTEST\n`+ tableroParcial(coordenada2, ocultos2D, numeros2D))
 
+    // tablero con las 2 jugadas actualizadas
+    let tableroActualizado = compararJugadas(coordenada1, coordenada2, ocultos2D, numeros2D)
+    tableroInicial = imprimoTablero(tableroActualizado)
 
-// Condición de salida
-let aJugar = true;
-const saludo = "Comencemos!!! \n";
-const arrayImpreso = imprimoArray2D(muestroValorOculto);
-const mensajeInicial = saludo + arrayImpreso
-// let resultado=[]
-
-while(aJugar){
-
-    let vueltas = 5;
-    
-
-    // COMIENZA EL JUEGO
-    while(vueltas){
-        alert(mensajeInicial);
-        jugada1=prompt("Ingrese las coordenadas: 'X Y'").split(" ") 
-        alert(arrayImpreso[a -1][b -1])  
-        jugada2=prompt("Ingrese las coordenadas: 'X Y'").split(" ") 
-        alert(arrayImpreso[c -1][d -1])
-        alert(muestroArray2D)
-
-        // alert(obtenerJugadas(muestroValorOculto))
-        // alert(comparaElementos(jugada1, jugada2))
-
-    // let actualizarTablero = imprimoArray2D(muestroValorOculto);
-    // alert(obtenerJugadas(imprimoArray2D(muestroArray2D)))
-    // alert(imprimoArray2D(actualizarTablero))
-  
-    vueltas--  
-    
     }
-    
-    aJugar = confirm(`¿Desea seguir jugando?`)
+  juego = confirm(`¿Querés volver a jugar?`)
 }
 
 
+// Falta mostrar mensaje si adivina o no, setear intentos, crear historial
+
     
 
-// JUGADORA
-    // ingresar dos coordenadas para ver si acierta (x,y)
-    // si erra, pierde un intento
-    // si acierta, quedan descubiertos los números
-    // si erra, vuelven a cubrise
-
-
-
-// JUEGO TERMINA
-    // cuando se descubren todos lo números
-    // o cuando terminan los 5 intentos
-
+// comparar jugadas y que los valores ingresados sean válidos
+// const validarCoordenadas =(coor)=>{
+//    let resultado
+//     if(coor[0] > 3 || coor[1] > 4) {
+//         resultado =`Ingrese valores válidos`
+       
+//     } 
+//     return resultado
+// }
 
